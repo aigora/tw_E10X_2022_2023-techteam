@@ -5,7 +5,10 @@
 ## Integrantes del equipo
 
 [Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
-- SERGIO ARIAS BLANCO (sergioariasblanco).
+- SERGIO ARIAS BLANCO (sergioariasblanco)
+- Jerzy Zawieja (JerZaw)
+-
+-
 
 ## Objetivos del trabajo
 
