@@ -7,8 +7,8 @@
 [Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
 - SERGIO ARIAS BLANCO (sergioariasblanco)
 - Jerzy Zawieja (JerZaw)
--
--
+- Julia Aragón García
+- Valeria Arango García
 
 ## Objetivos del trabajo
 
