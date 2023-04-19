@@ -8,7 +8,7 @@
 - SERGIO ARIAS BLANCO (sergioariasblanco)
 - Jerzy Zawieja (JerZaw)
 - Julia Aragón García (Juliaaragong)
-- Valeria Arango García
+- Valeria Arango García (valeriaarango)
 
 ## Objetivos del trabajo
 
