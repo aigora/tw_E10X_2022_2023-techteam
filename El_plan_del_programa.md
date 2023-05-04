@@ -4,7 +4,12 @@
 *que datos analizar, como analizarlos, que cosas queremos hacer*
 
 por ejemplo:
-  - calcular la media de la temperatura
+  - Creación de usuarios en los que se puedan modificar el fichero y quede registrado por cada sesión.
+  - Realización de cálculos estadísticos.
+  - Guardar resultados y búsquedas.
+  - Ordenar valores según los parámetros que el usuario desee. 
+  - Búsqueda de datos según unos parámetros especificados por los distintos usuarios. 
+  - Limitar el tamaño del fichero y que el programa vaya avisando del tamaño restante de éste. 
 
 
 
