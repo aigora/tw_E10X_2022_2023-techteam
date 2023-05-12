@@ -1,0 +1,1 @@
+enum eleccionModo{modoUsuario = 0, modoIncognito = 1};
