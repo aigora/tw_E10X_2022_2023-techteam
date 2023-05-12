@@ -2,4 +2,4 @@
 #include <stdbool.h>
 
 // muestra el menu principal i pide al ususario su eleccion
-bool menuPrincipal();
+int menuPrincipal();
