@@ -89,8 +89,21 @@ int crearCuenta()
                 return volver;
             }
         }
-    } while (!contrasenaCorrecta(usuarioNuevo.contrasena));
 
+    } while (!contrasenaCorrecta(usuarioNuevo.contrasena));
+    
+    FILE *archivo = fopen(usuarioNuevo.nombre, "w");
+    if (archivo == NULL)
+	 {
+        printf("No se pudo crear el archivo.\n");
+        return 1;
+    }
+    // Guardar nombre y contraseña en el archivo
+    fprintf(archivo, "Nombre: %s\nContraseña: %s\n", usuarioNuevo.nombre, usuarioNuevo.contrasena);
+    // Cerrar el archivo
+    fclose(archivo);
+    printf("Los datos se han guardado correctamente en el archivo.\n");
+//Desde la linea 95 hasta esta, el programa crea un usuario y una contraseña y la almacena en un archivo.txt
     // preguntando la pregunta de seguridad
     int eleccion;
     eleccion = eleccionPreguntaSeguridad(&usuarioNuevo);
