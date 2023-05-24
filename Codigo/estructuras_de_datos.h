@@ -1,12 +1,14 @@
-enum eleccionModo{modoIncognito = 0, modoUsuario = 1};
+enum eleccionModo{salir = -1, volver = 0, quedar = 1, modoIncognito = 2, modoUsuario = 3};
 
-enum volverOSalir{volver = 0, salir = -1};
-
-#define N 50
+#define N 100
 
 typedef struct
 {
     char nombre[N];
     char contrasena[N];
+
+    char preguntaSeguridad[N];
+    char respuestaSeguridad[N];
+
     // mas cosas para guardar los datos
 }usuario;

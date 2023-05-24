@@ -1,3 +1,3 @@
 #include <stdio.h>
 
-void sesionIcognito();
+int sesionIcognito();

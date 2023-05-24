@@ -15,16 +15,24 @@ int main()
 
 void buclePrincipal()
 {
-    switch (menuPrincipal())
+    int modo = volver;
+    while (modo == volver)
     {
-    case modoUsuario:
-        sesionUsuario();
-        break;
-    case modoIncognito:
-        sesionIcognito();
-        break;
-    default:
-        break;
+        switch (menuPrincipal())
+        {
+        case modoUsuario:
+            modo = sesionUsuario();
+            break;
+        case modoIncognito:
+            modo = sesionIcognito();
+            break;
+        case salir:
+            // salir del programa
+            modo = salir;
+            break;
+        default:
+            break;
+        }
     }
     printf("Saliendo del programa.\n");
 }
