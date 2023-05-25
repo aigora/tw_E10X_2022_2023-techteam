@@ -1,4 +1,7 @@
 *.vscode
+*.dev
+*.layout
+*.win
 
 # Prerequisites
 *.d
