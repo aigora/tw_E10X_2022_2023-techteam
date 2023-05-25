@@ -74,37 +74,37 @@ int lecturaGeneracion(generacionElectrica *generacionDatos)
         printf("magnitudes: %s\n", generacionDatos->magnitudes);
 
         fscanf(file, "%[^\n]\n", temporal); // omitir fila innecesaria vacia
-
+		int i,j;
         // lectura de las fechas
         fscanf(file, "%[^,]", temporal);
-        for (int i = 0; i < numeroColumnas - 1; i++)
+        for (i = 0; i < numeroColumnas - 1; i++)
         {
             fscanf(file, ",%i-%i", &generacionDatos->fechas[i].mes, &generacionDatos->fechas[i].ano);
         }
 
         // impresion de las fechas
-        for (int i = 0; i < numeroColumnas - 1; i++)
+        for (i = 0; i < numeroColumnas - 1; i++)
         {
             printf("%i-%i\n", generacionDatos->fechas[i].mes, generacionDatos->fechas[i].ano);
         }
 
         // lectura de cada tipo de generacion
-        for (int i = 0; i < numeroTiposDeGeneracion; i++)
+        for (i = 0; i < numeroTiposDeGeneracion; i++)
         {
             fscanf(file, "\n%[^,]", generacionDatos->TiposGeneracion[i].nombre);
             generacionDatos->TiposGeneracion[i].media = 0;
 
-            for (int j = 0; j < numeroColumnas - 1; j++)
+            for (j = 0; j < numeroColumnas - 1; j++)
             {
                 fscanf(file, ",%f", &generacionDatos->TiposGeneracion[i].valores[j]);
             }
         }
 
         // impresion de todos los valore leidos
-        for (int i = 0; i < numeroTiposDeGeneracion; i++)
+        for (i = 0; i < numeroTiposDeGeneracion; i++)
         {
             printf("\n----Tipo: %s ----\n", generacionDatos->TiposGeneracion[i].nombre);
-            for (int j = 0; j < numeroColumnas - 1; j++)
+            for (j = 0; j < numeroColumnas - 1; j++)
             {
                 printf("%f, ", generacionDatos->TiposGeneracion[i].valores[j]);
             }
