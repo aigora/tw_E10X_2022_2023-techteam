@@ -92,18 +92,6 @@ int crearCuenta()
 
     } while (!contrasenaCorrecta(usuarioNuevo.contrasena));
     
-    FILE *pf = fopen(usuarioNuevo.nombre, "w");
-    if (pf == NULL)
-	 {
-        printf("No se pudo crear el archivo.\n");
-        return 1;
-    }
-    // Guardar nombre y contraseña en el archivo
-    fprintf(pf, "Nombre: %s\nContraseña: %s\n", usuarioNuevo.nombre, usuarioNuevo.contrasena);
-    // Cerrar el archivo
-    fclose(pf);
-    printf("Los datos se han guardado correctamente en el archivo.\n");
-//Desde la linea 95 hasta esta, el programa crea un usuario y una contraseña y la almacena en un archivo.txt
     // preguntando la pregunta de seguridad
     int eleccion;
     eleccion = eleccionPreguntaSeguridad(&usuarioNuevo);
@@ -119,13 +107,19 @@ int crearCuenta()
         break;
     }
 
-    // guardar un nombre, una contrasena y una pregunta de seguridad con la respuesta
+    //el programa crea un usuario y una contrasena y la almacena en un nombredelusuario.txt
+    FILE *pf = fopen(usuarioNuevo.nombre, "w");
+    if (pf == NULL)
+	 {
+        printf("No se pudo crear el archivo.\n");
+        return 1;
+    }
+    // Guardar nombre y contrasena en el archivo
+    fprintf(pf, "nombre: %s\ncontrasena: %s\n", usuarioNuevo.nombre, usuarioNuevo.contrasena);
+    fprintf(pf, "preguntaSeguridad: %s\nrespuestaSeguridad: %s\n", usuarioNuevo.preguntaSeguridad, usuarioNuevo.respuestaSeguridad);
+    // Cerrar el archivo
+    fclose(pf);
     printf("----------Usuario guardado!----------\n");
-    // todos los datos del usuario por ahora
-    // printf("%s\n", usuarioNuevo.nombre);
-    // printf("%s\n", usuarioNuevo.contrasena);
-    // printf("%s\n", usuarioNuevo.preguntaSeguridad);
-    // printf("%s\n", usuarioNuevo.respuestaSeguridad);
 
     // abrir funciones del menu del incognito y usuario
     return salir;
@@ -137,7 +131,7 @@ int contrasenaCorrecta(char contrasena[])
     bool letraMayuscula = false;
     bool cifra = false;
     int i;
-    for (i = 0; i < N; i++)
+    for (i = 0; i < Npequeno; i++)
     {
         if (contrasena[i] == '\0')
         {
