@@ -1,15 +1,14 @@
-# [Título del trabajo]
+## DESCIFRANDO LA HISTORIA DETRÁS DE LOS DATOS
 
-[Descripción breve del proyecto a realizar (2-3 frases).]
+Podrás obtener numerosos resultados mediante distintas acciones que tendrás a mano con tu teclado. Un pequeño programa con el que puedes interactuar sobre un fichero con datos de la RED ELÉCTRICA ESPAÑOLA acerca de datos sobre la generación, uso, intercambio, demanda, etc., de energía en nuestro país.
 
-## Integrantes del equipo
+## INTEGRANTES DEL EQUIPO
 
-[Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
 - SERGIO ARIAS BLANCO (sergioariasblanco)
 - Jerzy Zawieja (JerZaw)
 - Julia Aragón García (Juliaaragong)
 - Valeria Arango García (valeriaarango)
 
-## Objetivos del trabajo
+## OBJETIVOS DEL TRABAJO
 
-[Lista de los objetivos que se persiguen con el trabajo propuesto.]
+A través del teclado, en cada portátil, el usuario podrá inciar sesión en su cuenta, o bien, elegir el modo incógnito,  en la que tendrá la posibilidad de relizar múltiples acciones (que podrá escocger entre guardar o no guardar): lectura de datos, cálculos estadísticos (media, sumatorio, mayor, menor...), adición de nuevos datos, guardar resultados y búsquedas... Añadido a todo esto, el programa irá avisando al usuario del tamaño que vaya teniendo el fichero de datos según se vaya llenando.
