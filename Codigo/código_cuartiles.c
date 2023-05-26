@@ -61,7 +61,7 @@ int main()
             printf("ERROR AL ABRIR EL FICHERO\n");
             return -1;
         }
-        while (fgets(linea, siezof(linea), file) != NULL)
+        while (fgets(linea, sizeof(linea), file) != NULL)
         {
             datos[numero_linea] = atof(linea); //Convierte la línea a números en punto flotante.
             numero_linea++;
