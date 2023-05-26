@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1685014711 source:c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\main.c
+	<stdio.h>
+	"menu_principal.h"
+	"estructuras_de_datos.h"
+	"sesion_usuario.h"
+	"sesion_incognito.h"
+
+1684844986 c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\menu_principal.h
+	<stdio.h>
+	<stdbool.h>
+
+1685034695 c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\estructuras_de_datos.h
+
+1685014711 c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\sesion_usuario.h
+
+1685034695 c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\sesion_incognito.h
+	<stdio.h>
+
+1684844986 source:c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\menu_principal.c
+	<stdio.h>
+	<stdbool.h>
+	"estructuras_de_datos.h"
+
+1685034695 source:c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\proyecto.c
+
+1685109156 source:c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\sesion_incognito.c
+	<stdio.h>
+	"estructuras_de_datos.h"
+
+1685034695 source:c:\users\sergi\desktop\github\tw_e10x_2022_2023-techteam\codigo\sesion_usuario.c
+	<stdio.h>
+	<stdbool.h>
+	<string.h>
+	"estructuras_de_datos.h"
+
