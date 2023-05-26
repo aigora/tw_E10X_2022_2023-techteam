@@ -14,6 +14,8 @@ int sesionIcognito()
         printf("\nEliga una de las opciones (Escriba el numero de la opcion).\n");
         printf("------------------------\n");
         printf("1. Leer los datos\n");
+        printf("2. Hacer calculos\n");
+        printf("3. Añadir nuevos datos\n");
         // printf("2. ...\n");
         printf("\"v\" Volver a la ultima pantalla\n");
         printf("\"q\" Salir del programa\n");
@@ -27,6 +29,19 @@ int sesionIcognito()
             {
                 return salir;
             }
+            break;
+        case '2':
+        	//Hacer calculos
+        	printf("\n Has elegido hacer calculos.\n");
+            printf("Ingresa la fecha (mes-año): ");
+            scanf("%d", &fecha);
+            printf("Ingresa el tipo de generación: ");
+            scanf("%d", &tipoGeneracion);
+            //FALTA CODIGO
+            break;
+        case '3':
+            // Añadir nuevos datos
+            // FALTA CODIGO
             break;
         case 'v':
             // volver a la ultima pantalla
