@@ -139,10 +139,6 @@ int calculoDatos(generacionElectrica *generacionDatos)
 	int total_Meses=0;
 
 
-    printf("Introduzca el tipo de generacion: ");
-    scanf("%s", tipoGeneracion);
-    
-
     printf("Introduzca el rango de fechas (mes y año) para los calculos.\n");
     printf("Fecha 1:\n");
     printf("Mes: ");
@@ -156,7 +152,6 @@ int calculoDatos(generacionElectrica *generacionDatos)
     printf("Año: ");
     scanf("%d", &anio2);
    
-	printf("\nHa seleccionado: %s\n", tipoGeneracion);
     printf("Ha seleccionado las fechas %d/%d - %d/%d\n", mes1, anio1, mes2, anio2);
  	printf("------------------------\n");
     printf("Seleccione que calculo desea hacer: \n");
@@ -177,7 +172,10 @@ int calculoDatos(generacionElectrica *generacionDatos)
     switch (seleccion_calculo)
 {
    case 1: //Valor Medio,  variables: media y total de meses para realizar operacion
-            for (i = 0; i < numeroTiposDeGeneracion; i++)
+             printf("Introduzca el tipo de generacion: ");
+    		scanf("%s", tipoGeneracion);
+    		printf("\nHa seleccionado: %s\n", tipoGeneracion);
+			for (i = 0; i < numeroTiposDeGeneracion; i++)
             {
                 if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
                 {
@@ -204,7 +202,9 @@ int calculoDatos(generacionElectrica *generacionDatos)
 	break;
 	case 2:
     // Valor máximo y mínimo
-
+		 printf("Introduzca el tipo de generacion: ");
+    	scanf("%s", tipoGeneracion);
+    	printf("\nHa seleccionado: %s\n", tipoGeneracion);
         for (i = 0; i < numeroTiposDeGeneracion; i++)
         {
             if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
@@ -242,7 +242,10 @@ int calculoDatos(generacionElectrica *generacionDatos)
             printf("El porcentaje en la generación total de %s entre las fechas %d/%d - %d/%d es: -------\n", tipoGeneracion, mes1, anio1, mes2, anio2);
             break;
     case 5:
-    	for (i = 0; i < numeroTiposDeGeneracion; i++)
+    	printf("Introduzca el tipo de generacion: ");
+    	scanf("%s", tipoGeneracion);
+    	printf("\nHa seleccionado: %s\n", tipoGeneracion);
+		for (i = 0; i < numeroTiposDeGeneracion; i++)
             {
                 if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
                 {
