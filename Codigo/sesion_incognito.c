@@ -173,6 +173,7 @@ int calculoDatos(generacionElectrica *generacionDatos)
   int i, j; 
   	float valor_maximo = 0.0;
 	float valor_minimo = generacionDatos->TiposGeneracion[0].valores[0];
+	float suma_total = 0.0;
     switch (seleccion_calculo)
 {
    case 1: //Valor Medio,  variables: media y total de meses para realizar operacion
@@ -241,7 +242,26 @@ int calculoDatos(generacionElectrica *generacionDatos)
             printf("El porcentaje en la generación total de %s entre las fechas %d/%d - %d/%d es: -------\n", tipoGeneracion, mes1, anio1, mes2, anio2);
             break;
     case 5:
-            printf("La suma total de la generación %s entre las fechas %d/%d - %d/%d es: -------\n", tipoGeneracion, mes1, anio1, mes2, anio2);
+    	for (i = 0; i < numeroTiposDeGeneracion; i++)
+            {
+                if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
+                {
+                    for (j = 0; j < numeroColumnas - 1; j++)
+                    {
+                        int mes = generacionDatos->fechas[j].mes;
+                        int anio = generacionDatos->fechas[j].ano;
+						
+                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
+                        //Para rango de fechas: fecha antes o despues del año inical
+						//fecha en el mismo año que el año de inicio y final y  mes menor, igual o posterior al mes inicial.
+                        {
+                            suma_total += generacionDatos->TiposGeneracion[i].valores[j];
+                        }
+                    }
+                    break;
+                }
+            }
+            printf("La suma total de la generación %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, suma_total);
             break;
     default:
             printf("El número elegido no es una opción válida, seleccione de nuevo.\n");
