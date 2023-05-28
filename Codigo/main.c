@@ -6,6 +6,7 @@
 #include "sesion_incognito.h"
 
 void buclePrincipal();
+int menuPrincipal();
 
 int main()
 {
@@ -24,7 +25,7 @@ void buclePrincipal()
             modo = sesionUsuario();
             break;
         case modoIncognito:
-            modo = sesionIcognito();
+            modo = sesionIncognito();
             break;
         case salir:
             // salir del programa

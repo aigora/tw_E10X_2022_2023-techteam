@@ -5,6 +5,7 @@
 
 int menuPrincipal()
 {
+
     printf("Bienvenidos al programa!\n");
     printf("Puedes usar el programa en el modo Incognito o iniciar la sesion.\n");
     char eleccion;
