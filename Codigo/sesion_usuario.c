@@ -79,6 +79,14 @@ int iniciarSesion()
     else
     {
         printf("Usuario o contraseña incorrectos, porfavor intentelo de nuevo.\n");
+        printf("¿Desea recibir ayuda con la contraseña?\n");
+        printf("1. Sí\n");
+        printf("2. No\n");
+        char opcion;
+        scanf(" %c", &opcion);
+        if (opcion == '1')
+        {ayudaContrasena();
+        }
         return volver;
     }
 	 
@@ -225,7 +233,62 @@ int eleccionPreguntaSeguridad(usuario *usuarioNuevo)
 
 int ayudaContrasena()
 {
-    // ayuda con una constrasena olvidada
-    // pregunta de seguridad?
-    return salir;
+    printf("Por favor, responda a la pregunta de seguridad:\n");
+
+    // Obtener el nombre de usuario ingresado en iniciarSesion()
+    char nombreUsuario[50];
+    printf("Ingrese el nombre de usuario: ");
+    scanf(" %49s", nombreUsuario);
+
+    // Abrir el archivo del usuario
+    FILE *pf = fopen(nombreUsuario, "r");
+    if (pf == NULL)
+    {
+        printf("No se pudo abrir el archivo del usuario.\n");
+        return volver;
+    }
+
+    // Leer los datos del usuario
+    usuario usuarioActual;
+    fscanf(pf, "nombre: %s\ncontrasena: %s\npreguntaSeguridad: %[^\n]\nrespuestaSeguridad: %[^\n]\n",
+           usuarioActual.nombre, usuarioActual.contrasena, usuarioActual.preguntaSeguridad, usuarioActual.respuestaSeguridad);
+    fclose(pf);
+
+    printf("Pregunta de seguridad: %s\n", usuarioActual.preguntaSeguridad);
+    printf("Ingrese su respuesta: ");
+    char respuestaIngresada[100];
+    scanf(" %99[^\n]", respuestaIngresada);
+
+    // Comparar la respuesta ingresada con la respuesta de seguridad almacenada
+    if (strcmp(respuestaIngresada, usuarioActual.respuestaSeguridad) == 0)
+    {
+        // La respuesta es correcta, permitir al usuario restablecer la contraseña
+        printf("Respuesta correcta. Puede restablecer su contraseña.\n");
+
+        // Solicitar al usuario que ingrese una nueva contraseña
+        char nuevaContrasena[100];
+        printf("Ingrese su nueva contraseña: ");
+        scanf(" %99s", nuevaContrasena);
+
+        // Abrir el archivo del usuario en modo escritura
+        FILE *archivoUsuario = fopen(nombreUsuario, "w");
+        if (archivoUsuario == NULL)
+        {
+            printf("No se pudo abrir el archivo del usuario.\n");
+            return volver;
+        }
+
+        // Cambiar la contraseña en el archivo
+        fprintf(archivoUsuario, "nombre: %s\ncontrasena: %s\npreguntaSeguridad: %s\nrespuestaSeguridad: %s\n",
+                usuarioActual.nombre, nuevaContrasena, usuarioActual.preguntaSeguridad, usuarioActual.respuestaSeguridad);
+        fclose(archivoUsuario);
+
+        printf("Se ha restablecido la contraseña.\n");
+        return volver;
+    }
+    else
+    {
+        printf("Respuesta incorrecta. No se puede restablecer la contraseña.\n");
+        return volver;
+    }
 }
