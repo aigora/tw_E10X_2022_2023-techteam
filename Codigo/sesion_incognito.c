@@ -135,7 +135,9 @@ int calculoDatos(generacionElectrica *generacionDatos)
 
     char tipoGeneracion[Npequeno];
     int mes1, anio1, mes2, anio2, seleccion_calculo;
-    float media;
+    float media =0;
+	int total_Meses=0;
+
 
     printf("Introduzca el tipo de generacion: ");
     scanf("%s", tipoGeneracion);
@@ -169,10 +171,34 @@ int calculoDatos(generacionElectrica *generacionDatos)
     scanf("%d", &seleccion_calculo);
     
   int i, j; 
-
     switch (seleccion_calculo)
     {
-    case 1:
+   case 1:
+            for (i = 0; i < numeroTiposDeGeneracion; i++)
+            {
+                if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
+                {
+                    for (j = 0; j < numeroColumnas - 1; j++)
+                    {
+                        int mes = generacionDatos->fechas[j].mes;
+                        int anio = generacionDatos->fechas[j].ano;
+
+                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) &&
+                            (anio < anio2 || (anio == anio2 && mes <= mes2)))
+                        {
+                            media += generacionDatos->TiposGeneracion[i].valores[j];
+                            total_Meses++;
+                        }
+                    }
+                    break;
+                }
+            }
+            if (media > 0)
+                media /= total_Meses;
+
+            printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, media);
+            break;
+	
     
     case 2:
             printf("Los valores máximos y mínimos de %s entre las fechas %d/%d - %d/%d son: -------\n", tipoGeneracion, mes1, anio1, mes2, anio2);
