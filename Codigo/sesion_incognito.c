@@ -14,7 +14,7 @@ int sesionIncognito()
         printf("\nEliga una de las opciones (Escriba el numero de la opcion).\n");
         printf("------------------------\n");
         printf("1. Leer los datos\n");
-        printf("2. Hacer calculos\n");
+        printf("2. Hacer calculos (es necesario haber leido los datos)\n");
         printf("3. Añadir nuevos datos\n");
         // printf("2. ...\n");
         printf("\"v\" Volver a la ultima pantalla\n");
@@ -171,9 +171,11 @@ int calculoDatos(generacionElectrica *generacionDatos)
     scanf("%d", &seleccion_calculo);
     
   int i, j; 
+  	float valor_maximo = 0.0;
+	float valor_minimo = generacionDatos->TiposGeneracion[0].valores[0];
     switch (seleccion_calculo)
-    {
-   case 1:
+{
+   case 1: //Valor Medio,  variables: media y total de meses para realizar operacion
             for (i = 0; i < numeroTiposDeGeneracion; i++)
             {
                 if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
@@ -182,9 +184,10 @@ int calculoDatos(generacionElectrica *generacionDatos)
                     {
                         int mes = generacionDatos->fechas[j].mes;
                         int anio = generacionDatos->fechas[j].ano;
-
-                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) &&
-                            (anio < anio2 || (anio == anio2 && mes <= mes2)))
+						
+                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
+                        //Para rango de fechas: fecha antes o despues del año inical
+						//fecha en el mismo año que el año de inicio y final y  mes menor, igual o posterior al mes inicial.
                         {
                             media += generacionDatos->TiposGeneracion[i].valores[j];
                             total_Meses++;
@@ -196,13 +199,41 @@ int calculoDatos(generacionElectrica *generacionDatos)
             if (media > 0)
                 media /= total_Meses;
 
-            printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, media);
-            break;
-	
+        	printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, media);
+	break;
+	case 2:
+    // Valor máximo y mínimo
+
+        for (i = 0; i < numeroTiposDeGeneracion; i++)
+        {
+            if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
+            {
+                for (j = 0; j < numeroColumnas; j++)
+                {
+                    int mes = generacionDatos->fechas[j].mes;
+                    int anio = generacionDatos->fechas[j].ano;
+                    if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
+                    {
+                       float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+
+                        if (valor_generacion > valor_maximo)
+                        {
+                        	valor_maximo = valor_generacion;
+						}
+
+                        if (valor_generacion < valor_minimo){
+                        	valor_minimo = valor_generacion;
+						}
+                            
+                    }
+                }
+                break;
+            }
+        }
+
+        printf("Los valores maximos y minimos de %s entre las fechas %d/%d - %d/%d son:\nValor maximo: %f\nValor minimo: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, valor_maximo, valor_minimo);
+        break;
     
-    case 2:
-            printf("Los valores máximos y mínimos de %s entre las fechas %d/%d - %d/%d son: -------\n", tipoGeneracion, mes1, anio1, mes2, anio2);
-            break;
     case 3:
             printf("La generación más usada entre las fechas %d/%d - %d/%d es: -------\n", mes1, anio1, mes2, anio2);
             break;
@@ -215,9 +246,9 @@ int calculoDatos(generacionElectrica *generacionDatos)
     default:
             printf("El número elegido no es una opción válida, seleccione de nuevo.\n");
             break;
-    }
     
     return volver;
+}
 }
 
 
