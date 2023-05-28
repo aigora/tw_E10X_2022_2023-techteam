@@ -1,4 +1,5 @@
 #include <stdio.h>
 
-int sesionIcognito();
+int sesionIncognito();
 int lecturaGeneracion(generacionElectrica* generacionDatos);
+int calculoDatos(generacionElectrica* generacionDatos);
