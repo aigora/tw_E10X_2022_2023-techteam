@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-
 #include "estructuras_de_datos.h"
 
 int sesionUsuario()
@@ -61,8 +60,28 @@ int iniciarSesion()
     scanf(" %s", usuarioActual.contrasena);
 
     // ver si existe este usuario y si la contrasena es correcta
-
-    // iniciando una sesion
+    //abrir el archivo
+    FILE *pf = fopen(usuarioActual.nombre, "r");
+    if (pf == NULL) 
+    {
+    	printf("Este usuario no exite, debera crear una cuenta");
+    	return volver;
+	}
+	// iniciamos una sesion en caso de SI existir el usuario
+	usuario usuarioGuardado;
+	fscanf(pf, "nombre: %s\ncontrasena: %s\npreguntaSeguridad: %s\nrespuestaSeguridad: %s\n", usuarioGuardado.nombre,
+	 usuarioGuardado.contrasena, usuarioGuardado.preguntaSeguridad, usuarioGuardado.respuestaSeguridad);
+	 fclose(pf);
+	  if (strcmp(usuarioActual.contrasena, usuarioGuardado.contrasena) == 0) //verificamos
+    {
+        printf("Se ha iniciado sesión como %s\n", usuarioGuardado.nombre);
+    }
+    else
+    {
+        printf("Usuario o contraseña incorrectos, porfavor intentelo de nuevo.\n");
+        return volver;
+    }
+	 
     return salir;
 }
 
