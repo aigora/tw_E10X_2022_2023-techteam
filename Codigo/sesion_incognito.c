@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <float.h>
 
 #include "estructuras_de_datos.h"
 #include "sesion_incognito.h"
@@ -72,7 +73,7 @@ int sesionIncognito(int sesionUsuario)
 int lecturaGeneracion(generacionElectrica *generacionDatos)
 {
     FILE *file;
-    file = fopen("generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
+    file = fopen("Codigo/generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
     if (file == NULL)
     {
         printf("ERROR AL ABRIR EL FICHERO\n");
@@ -147,7 +148,7 @@ int calculoDatos(generacionElectrica *generacionDatos)
     datosCalculos.media = 0;
     datosCalculos.total_Meses = 0;
     datosCalculos.valor_maximo = 0.0;
-    datosCalculos.valor_minimo = generacionDatos->TiposGeneracion[0].valores[0];
+    datosCalculos.valor_minimo = 0.0;
     datosCalculos.suma_total = 0.0;
     datosCalculos.generacionMasUsada = 0.0;
     datosCalculos.generacionMenosUsada = 0.0;
@@ -214,6 +215,10 @@ void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCa
     printf("Introduzca el tipo de generacion: ");
     scanf("%s", tipoGeneracionNombre);
     printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
+    
+    datosCalculos->media = 0.0;
+    datosCalculos->total_Meses = 0;
+    
     for (i = 0; i < numeroTiposDeGeneracion; i++)
     {
         if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
@@ -227,19 +232,19 @@ void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCa
                 // Para rango de fechas: fecha antes o despues del a�o inical
                 // fecha en el mismo a�o que el a�o de inicio y final y  mes menor, igual o posterior al mes inicial.
                 {
-                    datosCalculos->media += generacionDatos->TiposGeneracion[i].valores[j];
+                    double valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+                    printf("Valor a analizar: %f\n", valor_generacion);
+					datosCalculos->media = datosCalculos->media + valor_generacion;
                     datosCalculos->total_Meses++;
                 }
             }
             break;
         }
     }
-    if (datosCalculos->media > 0)
-    {
-        datosCalculos->media /= (float)datosCalculos->total_Meses;
-    }
-
-    printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->media);
+    double Media = datosCalculos->media / datosCalculos->total_Meses;
+	printf("Valor de suma total: %.3lf\n", datosCalculos->media);
+    printf("Valor de total de meses: %d\n", datosCalculos->total_Meses);
+    printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, Media);
 }
 
 void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
@@ -255,6 +260,9 @@ void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *
     {
         if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
         {
+        	datosCalculos->valor_maximo = -FLT_MAX;
+            datosCalculos->valor_minimo = FLT_MAX;
+            
             for (j = 0; j < numeroColumnas; j++)
             {
                 int mes = generacionDatos->fechas[j].mes;
@@ -262,6 +270,7 @@ void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *
                 if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) && (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
                 {
                     float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+                    printf(" Valor a analizar: %f \n", valor_generacion);
 
                     if (valor_generacion > datosCalculos->valor_maximo)
                     {
@@ -341,7 +350,9 @@ void sumaTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCal
                 // Para rango de fechas: fecha antes o despues del a�o inical
                 // fecha en el mismo a�o que el a�o de inicio y final y  mes menor, igual o posterior al mes inicial.
                 {
-                    datosCalculos->suma_total += generacionDatos->TiposGeneracion[i].valores[j];
+                    float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+                    printf(" Valor a analizar: %f \n", valor_generacion);
+					datosCalculos->suma_total += generacionDatos->TiposGeneracion[i].valores[j];
                 }
             }
             break;
@@ -373,7 +384,7 @@ void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCa
                 if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) &&
                     (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
                 {
-                    generacionTipo += generacionDatos->TiposGeneracion[i].valores[j];
+					generacionTipo += generacionDatos->TiposGeneracion[i].valores[j];
                 }
                 generacionTotal += generacionDatos->TiposGeneracion[i].valores[j];
             }

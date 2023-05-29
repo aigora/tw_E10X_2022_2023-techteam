@@ -112,7 +112,8 @@ void mostrarDatosGuardados(usuario *usuarioActual)
     if (usuarioActual->numeroCalculosGuardados > 0)
     {
         printf("-----CALCULOS GUARDADOS-----\n");
-        for (int i = 0; i < usuarioActual->numeroCalculosGuardados; i++)
+        int i;
+        for (i = 0; i < usuarioActual->numeroCalculosGuardados; i++)
         {
             printf("%s\t\t", usuarioActual->calculosGuardados[i].nombre);
             printf("%s\n", usuarioActual->calculosGuardados[i].valor);
@@ -252,7 +253,8 @@ void borrarUnDatoGuardado(usuario *usuarioActual, int numeroFila)
     fprintf(pf, "nombre:%s\ncontrasena:%s\n", usuarioActual->nombre, usuarioActual->contrasena);
     fprintf(pf, "preguntaSeguridad:%s\nrespuestaSeguridad:%s\n", usuarioActual->preguntaSeguridad, usuarioActual->respuestaSeguridad);
     fprintf(pf, "-----DATOS-----\n");
-    for (int i = 0; i < usuarioActual->numeroCalculosGuardados; i++)
+    int i;
+    for (i = 0; i < usuarioActual->numeroCalculosGuardados; i++)
     {
         if (i != numeroFila-1)
         {
