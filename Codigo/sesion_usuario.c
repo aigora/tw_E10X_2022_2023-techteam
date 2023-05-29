@@ -4,6 +4,7 @@
 
 #include "estructuras_de_datos.h"
 #include "sesion_usuario.h"
+#include "menu_usuario.h"
 
 int sesionUsuario()
 {
@@ -64,6 +65,7 @@ int iniciarSesion()
     // ver si existe este usuario y si la contrasena es correcta
     // abrir el archivo
     char nombreArchivo[Ngrande];
+    strcat(nombreArchivo, "usuarios/");
     strcat(nombreArchivo, usuarioActual.nombre);
     strcat(nombreArchivo, ".txt");
     FILE *pf = fopen(nombreArchivo, "r");
@@ -74,12 +76,24 @@ int iniciarSesion()
     }
     // iniciamos una sesion en caso de SI existir el usuario
     usuario usuarioGuardado;
-    fscanf(pf, "nombre: %s\ncontrasena: %s\npreguntaSeguridad: %s\nrespuestaSeguridad: %s\n", usuarioGuardado.nombre,
+    fscanf(pf, "nombre:%s\ncontrasena:%s\npreguntaSeguridad:%[^\n]\nrespuestaSeguridad:%s\n", usuarioGuardado.nombre,
            usuarioGuardado.contrasena, usuarioGuardado.preguntaSeguridad, usuarioGuardado.respuestaSeguridad);
+
     fclose(pf);
     if (strcmp(usuarioActual.contrasena, usuarioGuardado.contrasena) == 0) // verificamos
     {
-        printf("Se ha iniciado sesion como %s\n", usuarioGuardado.nombre);
+        switch (menuUsuario(&usuarioGuardado))
+        {
+        case salir:
+            return salir;
+            break;
+        case volver:
+            return volver;
+            break;
+        default:
+            return volver;
+            break;
+        }
     }
     else
     {
@@ -140,6 +154,7 @@ int crearCuenta()
         break;
     }
     char nombreArchivo[Ngrande];
+    strcat(nombreArchivo, "usuarios/");
     strcat(nombreArchivo, usuarioNuevo.nombre);
     strcat(nombreArchivo, ".txt");
     // el programa crea un usuario y una contrasena y la almacena en un nombredelusuario.txt
@@ -150,8 +165,9 @@ int crearCuenta()
         return 1;
     }
     // Guardar nombre y contrasena en el archivo
-    fprintf(pf, "nombre: %s\ncontrasena: %s\n", usuarioNuevo.nombre, usuarioNuevo.contrasena);
-    fprintf(pf, "preguntaSeguridad: %s\nrespuestaSeguridad: %s\n", usuarioNuevo.preguntaSeguridad, usuarioNuevo.respuestaSeguridad);
+    fprintf(pf, "nombre:%s\ncontrasena:%s\n", usuarioNuevo.nombre, usuarioNuevo.contrasena);
+    fprintf(pf, "preguntaSeguridad:%s\nrespuestaSeguridad:%s\n", usuarioNuevo.preguntaSeguridad, usuarioNuevo.respuestaSeguridad);
+    fprintf(pf, "-----DATOS-----\n");
     // Cerrar el archivo
     fclose(pf);
     printf("----------Usuario guardado!----------\n");
@@ -250,6 +266,7 @@ int ayudaContrasena()
 
     // Abrir el archivo del usuario
     char nombreArchivo[Ngrande];
+    strcat(nombreArchivo, "usuarios/");
     strcat(nombreArchivo, nombreUsuario);
     strcat(nombreArchivo, ".txt");
     FILE *pf = fopen(nombreArchivo, "r");

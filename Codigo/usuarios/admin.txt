@@ -1,0 +1,7 @@
+nombre:admin
+contrasena:Admin123
+preguntaSeguridad:Cual era su comida favorita?
+respuestaSeguridad:admin
+-----DATOS-----
+datoUno,123.123123
+datoTres,333.333

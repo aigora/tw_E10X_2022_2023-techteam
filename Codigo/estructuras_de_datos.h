@@ -1,3 +1,6 @@
+#ifndef ESTRUCTURAS_DE_DATOS_H
+#define ESTRUCTURAS_DE_DATOS_H
+
 enum eleccionModo
 {
     salir = -1,
@@ -7,10 +10,22 @@ enum eleccionModo
     modoUsuario = 3
 };
 
+enum estadoSesionUsuario
+{
+    sesionCerrada = 0,
+    sesionAbierta = 1
+};
+
 #define Npequeno 100
 #define Ngrande 3000
 #define numeroTiposDeGeneracion 17 // numero cuantos tipos de generacion hay empezando con 1
 #define numeroColumnas 25          // numero de columnas en el archivo empezando con 1
+
+typedef struct // struct para calculos guardados
+{
+    char nombre[Npequeno];
+    char valor[Npequeno];
+} calculoGuardado;
 
 typedef struct
 {
@@ -20,7 +35,10 @@ typedef struct
     char preguntaSeguridad[Npequeno];
     char respuestaSeguridad[Npequeno];
 
-    // mas cosas para guardar los datos
+    int sesionEstado; //si la sesion esta abierta o cerrada
+
+    calculoGuardado calculosGuardados[Npequeno];
+    int numeroCalculosGuardados;
 } usuario;
 
 typedef struct // struct para cada tipo de generacion
@@ -58,3 +76,5 @@ typedef struct
     float generacionMasUsada;
     float generacionMenosUsada;
 } datosParaCalculos;
+
+#endif

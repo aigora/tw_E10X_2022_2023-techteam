@@ -24,7 +24,7 @@ void buclePrincipal()
             modo = sesionUsuario();
             break;
         case modoIncognito:
-            modo = sesionIncognito();
+            modo = sesionIncognito(sesionCerrada);
             break;
         case salir:
             // salir del programa

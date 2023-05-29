@@ -4,21 +4,30 @@
 #include "estructuras_de_datos.h"
 #include "sesion_incognito.h"
 
-int sesionIncognito()
+int sesionIncognito(int sesionUsuario)
 {
-    printf("\nHas elegido el modo incognito.\n");
-    printf("Tienes un accesso solo al menu incognito y no puedes guaardar calculaciones.\n");
+    if (sesionUsuario == sesionCerrada)
+    {
+        printf("\nHas elegido el modo incognito.\n");
+        printf("Tienes un accesso solo al menu incognito y no puedes guaardar calculaciones.\n");
+    }
+    else if (sesionUsuario == sesionAbierta)
+    {
+        printf("\nEstas en el menu incognito. Para acceder el menu Usuario vuelva a la ultima pantalla.\n");
+        printf("\nDespues de hacer calculos puedes guardarlos, porque tienes la sesion abierta\n");
+    }
+
     char eleccion;
     generacionElectrica generacionDatos;
 
     do
     {
+        printf("-----MENU INCOGNITO----\n");
         printf("\nEliga una de las opciones (Escriba el numero de la opcion).\n");
         printf("------------------------\n");
         printf("1. Leer los datos\n");
         printf("2. Hacer calculos (es necesario haber leido los datos)\n");
         printf("3. Anadir nuevos datos\n");
-        // printf("2. ...\n");
         printf("\"v\" Volver a la ultima pantalla\n");
         printf("\"q\" Salir del programa\n");
         printf("------------------------\n");

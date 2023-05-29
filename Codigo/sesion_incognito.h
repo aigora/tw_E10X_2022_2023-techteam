@@ -1,3 +1,6 @@
+#ifndef SESION_INCOGNITO_H
+#define SESION_INCOGNITO_H
+
 
 void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos);
 void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos);
@@ -8,4 +11,6 @@ void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCa
 int lecturaGeneracion(generacionElectrica* generacionDatos);
 int calculoDatos(generacionElectrica* generacionDatos);
 
-int sesionIncognito();
+int sesionIncognito(int sesionUsuario);
+
+#endif
