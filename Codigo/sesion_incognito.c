@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "estructuras_de_datos.h"
+#include "sesion_incognito.h"
 
 int sesionIncognito()
 {
@@ -172,11 +173,11 @@ int calculoDatos(generacionElectrica *generacionDatos)
 
     {
     case 1: // Valor Medio,  variables: media y total de meses para realizar operacion
-        valorMedio(&generacionDatos, &datosCalculos);
+        valorMedio(generacionDatos, &datosCalculos);
         break;
     case 2:
         // Valor m�ximo y m�nimo
-        valorMaximoMinimo(&generacionDatos, &datosCalculos);
+        valorMaximoMinimo(generacionDatos, &datosCalculos);
         break;
     case 3:
         // generacios Mas y Menos usada

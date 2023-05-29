@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+
 #include "estructuras_de_datos.h"
+#include "sesion_usuario.h"
 
 int sesionUsuario()
 {

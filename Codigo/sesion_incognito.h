@@ -1,4 +1,3 @@
-#include <stdio.h>
 
 void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos);
 void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos);
