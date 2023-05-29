@@ -82,6 +82,7 @@ int iniciarSesion()
     fclose(pf);
     if (strcmp(usuarioActual.contrasena, usuarioGuardado.contrasena) == 0) // verificamos
     {
+        usuarioGuardado.sesionEstado = sesionAbierta;
         switch (menuUsuario(&usuarioGuardado))
         {
         case salir:

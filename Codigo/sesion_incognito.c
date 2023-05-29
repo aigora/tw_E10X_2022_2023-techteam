@@ -5,14 +5,14 @@
 #include "estructuras_de_datos.h"
 #include "sesion_incognito.h"
 
-int sesionIncognito(int sesionUsuario)
+int sesionIncognito(usuario *usuarioActual)
 {
-    if (sesionUsuario == sesionCerrada)
+    if (usuarioActual->sesionEstado == sesionCerrada)
     {
         printf("\nHas elegido el modo incognito.\n");
         printf("Tienes un accesso solo al menu incognito y no puedes guaardar calculaciones.\n");
     }
-    else if (sesionUsuario == sesionAbierta)
+    else if (usuarioActual->sesionEstado == sesionAbierta)
     {
         printf("\nEstas en el menu incognito. Para acceder el menu Usuario vuelva a la ultima pantalla.\n");
         printf("\nDespues de hacer calculos puedes guardarlos, porque tienes la sesion abierta\n");
@@ -23,12 +23,20 @@ int sesionIncognito(int sesionUsuario)
 
     do
     {
-        printf("-----MENU INCOGNITO----\n");
+        if (usuarioActual->sesionEstado == sesionCerrada)
+        {
+            printf("-----MENU INCOGNITO----\n");
+        }
+        else if (usuarioActual->sesionEstado == sesionAbierta)
+        {
+            printf("-----MENU INCOGNITO CON USUARIO----\n");
+        }
+
         printf("\nEliga una de las opciones (Escriba el numero de la opcion).\n");
         printf("------------------------\n");
         printf("1. Leer los datos\n");
         printf("2. Hacer calculos (es necesario haber leido los datos)\n");
-        printf("3. Anadir nuevos datos\n");
+        // printf("3. Anadir nuevos datos\n");
         printf("\"v\" Volver a la ultima pantalla\n");
         printf("\"q\" Salir del programa\n");
         printf("------------------------\n");
@@ -43,7 +51,7 @@ int sesionIncognito(int sesionUsuario)
             }
             break;
         case '2':
-            if (calculoDatos(&generacionDatos) == salir)
+            if (calculoDatos(&generacionDatos, usuarioActual) == salir)
             {
                 return salir;
             }
@@ -139,7 +147,7 @@ int lecturaGeneracion(generacionElectrica *generacionDatos)
     return volver;
 }
 
-int calculoDatos(generacionElectrica *generacionDatos)
+int calculoDatos(generacionElectrica *generacionDatos, usuario *usuarioActual)
 {
     printf("Ha seleccionado hacer calculos\n");
 
@@ -178,26 +186,28 @@ int calculoDatos(generacionElectrica *generacionDatos)
     printf("\"q\" Salir del programa\n");
 
     scanf("%d", &seleccion_calculo);
+    calculoGuardado calculoNuevo1;
+    calculoGuardado calculoNuevo2;
+    sprintf(calculoNuevo2.nombre, "VACIO");
 
     switch (seleccion_calculo)
-
     {
     case 1: // Valor Medio,  variables: media y total de meses para realizar operacion
-        valorMedio(generacionDatos, &datosCalculos);
+        valorMedio(generacionDatos, &datosCalculos, &calculoNuevo1, &calculoNuevo2);
         break;
     case 2:
         // Valor m�ximo y m�nimo
-        valorMaximoMinimo(generacionDatos, &datosCalculos);
+        valorMaximoMinimo(generacionDatos, &datosCalculos, &calculoNuevo1, &calculoNuevo2);
         break;
     case 3:
         // generacios Mas y Menos usada
-        generacionMasMenosUsada(generacionDatos, &datosCalculos);
+        generacionMasMenosUsada(generacionDatos, &datosCalculos, &calculoNuevo1, &calculoNuevo2);
         break;
     case 4:
-        porcentajeGeneracionTotal(generacionDatos, &datosCalculos);
+        porcentajeGeneracionTotal(generacionDatos, &datosCalculos, &calculoNuevo1, &calculoNuevo2);
         break;
     case 5:
-        sumaTotal(generacionDatos, &datosCalculos);
+        sumaTotal(generacionDatos, &datosCalculos, &calculoNuevo1, &calculoNuevo2);
         break;
     default:
         printf("El numero elegido no es una opcion valida, seleccione de nuevo.\n");
@@ -205,20 +215,48 @@ int calculoDatos(generacionElectrica *generacionDatos)
         return volver;
     }
 
+    if (usuarioActual->sesionEstado == sesionAbierta)
+    {
+        printf("--------\n");
+        printf("Desea guardar el resultado en su archivo?\n");
+
+        char eleccion;
+        do
+        {
+            printf("[1] Si\n");
+            printf("[2] No\n");
+            scanf(" %c", &eleccion);
+            switch (eleccion)
+            {
+            case '1':
+                guardarCalculos(usuarioActual, &calculoNuevo1, &calculoNuevo2);
+                return volver;
+                break;
+            case '2':
+                return volver;
+                break;
+            default:
+                printf("Has escrito una letra mala. Eliga otra vez\n");
+                break;
+            }
+        } while (1);
+    }
+
     return volver;
 }
 
-void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos,
+                calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
 {
     int i, j;
     char tipoGeneracionNombre[Npequeno];
     printf("Introduzca el tipo de generacion: ");
     scanf("%s", tipoGeneracionNombre);
     printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
-    
+
     datosCalculos->media = 0.0;
     datosCalculos->total_Meses = 0;
-    
+
     for (i = 0; i < numeroTiposDeGeneracion; i++)
     {
         if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
@@ -232,22 +270,28 @@ void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCa
                 // Para rango de fechas: fecha antes o despues del a�o inical
                 // fecha en el mismo a�o que el a�o de inicio y final y  mes menor, igual o posterior al mes inicial.
                 {
-                    double valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+                    float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
                     printf("Valor a analizar: %f\n", valor_generacion);
-					datosCalculos->media = datosCalculos->media + valor_generacion;
+                    datosCalculos->media = datosCalculos->media + valor_generacion;
                     datosCalculos->total_Meses++;
                 }
             }
             break;
         }
     }
-    double Media = datosCalculos->media / datosCalculos->total_Meses;
-	printf("Valor de suma total: %.3lf\n", datosCalculos->media);
+    double Media = datosCalculos->media / (float)datosCalculos->total_Meses;
+    printf("Valor de suma total: %.3lf\n", datosCalculos->media);
     printf("Valor de total de meses: %d\n", datosCalculos->total_Meses);
     printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, Media);
+
+    sprintf(calculoNuevo1->nombre, "La media de los datos de %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo1->valor, "%f", Media);
 }
 
-void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos,
+                       calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
 {
     printf("Introduzca el tipo de generacion: ");
     int i, j;
@@ -260,9 +304,9 @@ void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *
     {
         if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
         {
-        	datosCalculos->valor_maximo = -FLT_MAX;
+            datosCalculos->valor_maximo = -FLT_MAX;
             datosCalculos->valor_minimo = FLT_MAX;
-            
+
             for (j = 0; j < numeroColumnas; j++)
             {
                 int mes = generacionDatos->fechas[j].mes;
@@ -288,9 +332,20 @@ void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *
     }
 
     printf("Los valores maximos y minimos de %s entre las fechas %d/%d - %d/%d son:\nValor maximo: %f\nValor minimo: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->valor_maximo, datosCalculos->valor_minimo);
+
+    sprintf(calculoNuevo1->nombre, "El valor maximo de %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo1->valor, "%f", datosCalculos->valor_maximo);
+
+    sprintf(calculoNuevo2->nombre, "El valor minimo de %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo2->valor, "%f", datosCalculos->valor_minimo);
 }
 
-void generacionMasMenosUsada(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+void generacionMasMenosUsada(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos,
+                             calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
 {
     char tipoGeneracionNombre[Npequeno];
     int i, j;
@@ -328,9 +383,20 @@ void generacionMasMenosUsada(generacionElectrica *generacionDatos, datosParaCalc
 
     printf("La generacion mas usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->generacionMasUsada);
     printf("La generacion menos usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->generacionMenosUsada);
+
+    sprintf(calculoNuevo1->nombre, "La generacion mas usada de %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo1->valor, "%f", datosCalculos->generacionMasUsada);
+
+    sprintf(calculoNuevo2->nombre, "La generacion menos usada de %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo2->valor, "%f", datosCalculos->generacionMenosUsada);
 }
 
-void sumaTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+void sumaTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos,
+               calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
 {
     char tipoGeneracionNombre[Npequeno];
     int i, j;
@@ -352,16 +418,22 @@ void sumaTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCal
                 {
                     float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
                     printf(" Valor a analizar: %f \n", valor_generacion);
-					datosCalculos->suma_total += generacionDatos->TiposGeneracion[i].valores[j];
+                    datosCalculos->suma_total += generacionDatos->TiposGeneracion[i].valores[j];
                 }
             }
             break;
         }
     }
     printf("La suma total de la generacion %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->suma_total);
+
+    sprintf(calculoNuevo1->nombre, "La suma total de la generacion %s entre las fechas %d/%d - %d/%d",
+            tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+            datosCalculos->mes2, datosCalculos->anio2);
+    sprintf(calculoNuevo1->valor, "%f", datosCalculos->suma_total);
 }
 
-void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos,
+                               calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
 {
     char tipoGeneracionNombre[Npequeno];
     int i, j;
@@ -384,7 +456,7 @@ void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCa
                 if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) &&
                     (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
                 {
-					generacionTipo += generacionDatos->TiposGeneracion[i].valores[j];
+                    generacionTipo += generacionDatos->TiposGeneracion[i].valores[j];
                 }
                 generacionTotal += generacionDatos->TiposGeneracion[i].valores[j];
             }
@@ -396,9 +468,58 @@ void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCa
     {
         float porcentaje = (generacionTipo / generacionTotal) * 100;
         printf("La generacion de %s representa el %.2f%% de la generacion total entre las fechas %d/%d - %d/%d\n", tipoGeneracionNombre, porcentaje, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2);
+
+        sprintf(calculoNuevo1->nombre, "La generacion de %s de la generacion total entre las fechas %d/%d - %d/%d representa el porcentaje",
+                tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1,
+                datosCalculos->mes2, datosCalculos->anio2);
+        sprintf(calculoNuevo1->valor, "%.2f%%", porcentaje);
     }
     else
     {
         printf("No se han encontrado datos de generacion para el tipo seleccionado entre las fechas %d/%d - %d/%d\n", datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2);
+
+        sprintf(calculoNuevo1->nombre, "No se han encontrado datos de generacion para el tipo seleccionado entre las fechas %d/%d - %d/%d",
+                datosCalculos->mes1, datosCalculos->anio1,
+                datosCalculos->mes2, datosCalculos->anio2);
+        sprintf(calculoNuevo1->valor, "0");
     }
+}
+
+void guardarCalculos(usuario *usuarioActual, calculoGuardado *calculoNuevo1, calculoGuardado *calculoNuevo2)
+{
+    char nombreArchivo[Ngrande] = "";
+    strcat(nombreArchivo, "usuarios/");
+    strcat(nombreArchivo, usuarioActual->nombre);
+    strcat(nombreArchivo, ".txt");
+    FILE *pf = fopen(nombreArchivo, "a");
+
+    if (pf == NULL)
+    {
+        printf("No se pudo acceder el archivo FILE SOURCE.\n");
+        return;
+    }
+
+    strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre, calculoNuevo1->nombre);
+    strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor, calculoNuevo1->valor);
+
+    // Guardar dato nuevo
+    fprintf(pf, "%s,%s\n",
+            usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre,
+            usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor);
+    usuarioActual->numeroCalculosGuardados++;
+
+    if (!strcmp(calculoNuevo2->nombre, "VACIO"))
+    {
+        strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre, calculoNuevo2->nombre);
+        strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor, calculoNuevo2->valor);
+
+        // Guardar dato nuevo
+        fprintf(pf, "%s,%s\n",
+                usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre,
+                usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor);
+        usuarioActual->numeroCalculosGuardados++;
+    }
+
+    fclose(pf);
+    printf("Guardado con exito!\nPara ver todos los datos guardados abre el menu del usuario.\n");
 }
