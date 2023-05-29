@@ -508,7 +508,7 @@ void guardarCalculos(usuario *usuarioActual, calculoGuardado *calculoNuevo1, cal
             usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor);
     usuarioActual->numeroCalculosGuardados++;
 
-    if (!strcmp(calculoNuevo2->nombre, "VACIO"))
+    if (strcmp(calculoNuevo2->nombre, "VACIO") != 0)
     {
         strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre, calculoNuevo2->nombre);
         strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor, calculoNuevo2->valor);
