@@ -3,6 +3,9 @@ contrasena:Admin123
 preguntaSeguridad:Cual era su comida favorita?
 respuestaSeguridad:admin
 -----DATOS-----
-datoUno,123.123123
-datoTres,333.333
 La media de los datos de Eolica entre las fechas 1/2021 - 3/2021,6334.350098
+El valor maximo de Eolica entre las fechas 4/2021 - 8/2022,6910.032715
+El valor maximo de Eolica entre las fechas 1/2021 - 8/2022,7101.249023
+El valor minimo de Eolica entre las fechas 1/2021 - 8/2022,3234.274902
+La generacion mas usada de Solar_termica entre las fechas 8/2022 - 11/2022,619.958984
+La generacion menos usada de Solar_termica entre las fechas 8/2022 - 11/2022,102.634026

@@ -162,17 +162,31 @@ int calculoDatos(generacionElectrica *generacionDatos, usuario *usuarioActual)
     datosCalculos.generacionMenosUsada = 0.0;
 
     printf("Introduzca el rango de fechas (mes y ano) para los calculos.\n");
+    printf("La fecha minima: %i-%i\nLa fecha maxima: %i-%i\n\n", generacionDatos->fechas[0].mes, generacionDatos->fechas[0].ano, generacionDatos->fechas[numeroColumnas - 2].mes, generacionDatos->fechas[numeroColumnas - 2].ano);
+
     printf("Fecha 1:\n");
     printf("Mes: ");
     scanf("%d", &datosCalculos.mes1);
     printf("Ano: ");
     scanf("%d", &datosCalculos.anio1);
+    if (datosCalculos.anio1 < generacionDatos->fechas[0].ano ||
+        datosCalculos.anio1 > generacionDatos->fechas[numeroColumnas - 2].ano)
+    {
+        printf("Has elegido una fecha mala.\n");
+        return volver;
+    }
 
     printf("Fecha 2:\n");
     printf("Mes: ");
     scanf("%d", &datosCalculos.mes2);
     printf("Ano: ");
     scanf("%d", &datosCalculos.anio2);
+    if (datosCalculos.anio2 < generacionDatos->fechas[0].ano ||
+        datosCalculos.anio2 > generacionDatos->fechas[numeroColumnas - 2].ano)
+    {
+        printf("Has elegido una fecha mala.\n");
+        return volver;
+    }
 
     printf("Ha seleccionado las fechas %d/%d - %d/%d\n", datosCalculos.mes1, datosCalculos.anio1, datosCalculos.mes2, datosCalculos.anio2);
     printf("------------------------\n");
@@ -508,7 +522,7 @@ void guardarCalculos(usuario *usuarioActual, calculoGuardado *calculoNuevo1, cal
             usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor);
     usuarioActual->numeroCalculosGuardados++;
 
-    if (!strcmp(calculoNuevo2->nombre, "VACIO"))
+    if (strcmp(calculoNuevo2->nombre, "VACIO") != 0)
     {
         strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].nombre, calculoNuevo2->nombre);
         strcpy(usuarioActual->calculosGuardados[usuarioActual->numeroCalculosGuardados].valor, calculoNuevo2->valor);
