@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "estructuras_de_datos.h"
 
@@ -15,7 +16,7 @@ int sesionIncognito()
         printf("------------------------\n");
         printf("1. Leer los datos\n");
         printf("2. Hacer calculos (es necesario haber leido los datos)\n");
-        printf("3. Añadir nuevos datos\n");
+        printf("3. Anadir nuevos datos\n");
         // printf("2. ...\n");
         printf("\"v\" Volver a la ultima pantalla\n");
         printf("\"q\" Salir del programa\n");
@@ -30,16 +31,15 @@ int sesionIncognito()
                 return salir;
             }
             break;
-        case '2': 
-        if (calculoDatos(&generacionDatos) == salir)
+        case '2':
+            if (calculoDatos(&generacionDatos) == salir)
             {
                 return salir;
             }
             break;
-        case '3': 
-        
-    
-            // Añadir nuevos datos
+        case '3':
+
+            // Anadir nuevos datos
             // FALTA CODIGO
             break;
         case 'v':
@@ -62,7 +62,7 @@ int sesionIncognito()
 int lecturaGeneracion(generacionElectrica *generacionDatos)
 {
     FILE *file;
-    file = fopen("Codigo/generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
+    file = fopen("generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
     if (file == NULL)
     {
         printf("ERROR AL ABRIR EL FICHERO\n");
@@ -88,7 +88,7 @@ int lecturaGeneracion(generacionElectrica *generacionDatos)
         printf("magnitudes: %s\n", generacionDatos->magnitudes);
 
         fscanf(file, "%[^\n]\n", temporal); // omitir fila innecesaria vacia
-		int i,j;
+        int i, j;
         // lectura de las fechas
         fscanf(file, "%[^,]", temporal);
         for (i = 0; i < numeroColumnas - 1; i++)
@@ -128,32 +128,35 @@ int lecturaGeneracion(generacionElectrica *generacionDatos)
     return volver;
 }
 
-
 int calculoDatos(generacionElectrica *generacionDatos)
 {
     printf("Ha seleccionado hacer calculos\n");
 
-    char tipoGeneracion[Npequeno];
-    int mes1, anio1, mes2, anio2, seleccion_calculo;
-    float media =0;
-	int total_Meses=0;
+    int seleccion_calculo;
+    datosParaCalculos datosCalculos;
+    datosCalculos.media = 0;
+    datosCalculos.total_Meses = 0;
+    datosCalculos.valor_maximo = 0.0;
+    datosCalculos.valor_minimo = generacionDatos->TiposGeneracion[0].valores[0];
+    datosCalculos.suma_total = 0.0;
+    datosCalculos.generacionMasUsada = 0.0;
+    datosCalculos.generacionMenosUsada = 0.0;
 
-
-    printf("Introduzca el rango de fechas (mes y año) para los calculos.\n");
+    printf("Introduzca el rango de fechas (mes y ano) para los calculos.\n");
     printf("Fecha 1:\n");
     printf("Mes: ");
-    scanf("%d", &mes1);
-    printf("Año: ");
-    scanf("%d", &anio1);
+    scanf("%d", &datosCalculos.mes1);
+    printf("Ano: ");
+    scanf("%d", &datosCalculos.anio1);
 
     printf("Fecha 2:\n");
     printf("Mes: ");
-    scanf("%d", &mes2);
-    printf("Año: ");
-    scanf("%d", &anio2);
-   
-    printf("Ha seleccionado las fechas %d/%d - %d/%d\n", mes1, anio1, mes2, anio2);
- 	printf("------------------------\n");
+    scanf("%d", &datosCalculos.mes2);
+    printf("Ano: ");
+    scanf("%d", &datosCalculos.anio2);
+
+    printf("Ha seleccionado las fechas %d/%d - %d/%d\n", datosCalculos.mes1, datosCalculos.anio1, datosCalculos.mes2, datosCalculos.anio2);
+    printf("------------------------\n");
     printf("Seleccione que calculo desea hacer: \n");
     printf("1. Valor medio\n");
     printf("2. Valor maximo y minimo\n");
@@ -162,136 +165,203 @@ int calculoDatos(generacionElectrica *generacionDatos)
     printf("5. Suma total\n");
     printf("\"v\" Volver a la ultima pantalla\n");
     printf("\"q\" Salir del programa\n");
-	
+
     scanf("%d", &seleccion_calculo);
-    
-  int i, j; 
-  	float valor_maximo = 0.0;
-	float valor_minimo = generacionDatos->TiposGeneracion[0].valores[0];
-	float suma_total = 0.0;
+
     switch (seleccion_calculo)
-{
-   case 1: //Valor Medio,  variables: media y total de meses para realizar operacion
-             printf("Introduzca el tipo de generacion: ");
-    		scanf("%s", tipoGeneracion);
-    		printf("\nHa seleccionado: %s\n", tipoGeneracion);
-			for (i = 0; i < numeroTiposDeGeneracion; i++)
-            {
-                if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
-                {
-                    for (j = 0; j < numeroColumnas - 1; j++)
-                    {
-                        int mes = generacionDatos->fechas[j].mes;
-                        int anio = generacionDatos->fechas[j].ano;
-						
-                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
-                        //Para rango de fechas: fecha antes o despues del año inical
-						//fecha en el mismo año que el año de inicio y final y  mes menor, igual o posterior al mes inicial.
-                        {
-                            media += generacionDatos->TiposGeneracion[i].valores[j];
-                            total_Meses++;
-                        }
-                    }
-                    break;
-                }
-            }
-            if (media > 0)
-                media /= total_Meses;
 
-        	printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, media);
-	break;
-	case 2:
-    // Valor máximo y mínimo
-		 printf("Introduzca el tipo de generacion: ");
-    	scanf("%s", tipoGeneracion);
-    	printf("\nHa seleccionado: %s\n", tipoGeneracion);
-        for (i = 0; i < numeroTiposDeGeneracion; i++)
-        {
-            if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
-            {
-                for (j = 0; j < numeroColumnas; j++)
-                {
-                    int mes = generacionDatos->fechas[j].mes;
-                    int anio = generacionDatos->fechas[j].ano;
-                    if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
-                    {
-                       float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
-
-                        if (valor_generacion > valor_maximo)
-                        {
-                        	valor_maximo = valor_generacion;
-						}
-
-                        if (valor_generacion < valor_minimo){
-                        	valor_minimo = valor_generacion;
-						}
-                            
-                    }
-                }
-                break;
-            }
-        }
-
-        printf("Los valores maximos y minimos de %s entre las fechas %d/%d - %d/%d son:\nValor maximo: %f\nValor minimo: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, valor_maximo, valor_minimo);
-        break;
-    
-    case 3:
-        printf("Introduzca el tipo de generación: ");
-        scanf("%s", tipoGeneracion);
-        printf("\nHa seleccionado: %s\n", tipoGeneracion);
-		
-		 float generacionMasUsada = 0.0;
-         float generacionMenosUsada = 0.0;
-
-    for (i = 0; i < numeroTiposDeGeneracion; i++)
     {
-        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
-        {
-            generacionMasUsada = generacionDatos->TiposGeneracion[i].valores[0];
-            generacionMenosUsada = generacionDatos->TiposGeneracion[i].valores[0];
-
-            for (j = 1; j < numeroColumnas - 1; j++)
-            {
-                int mes = generacionDatos->fechas[j].mes;
-                int anio = generacionDatos->fechas[j].ano;
-
-                if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
-                {
-                    float valorGeneracion = generacionDatos->TiposGeneracion[i].valores[j];
-
-                    if (valorGeneracion > generacionMasUsada)
-                        generacionMasUsada = valorGeneracion;
-
-                    if (valorGeneracion < generacionMenosUsada)
-                        generacionMenosUsada = valorGeneracion;
-                }
-            }
-            break;
-        }
+    case 1: // Valor Medio,  variables: media y total de meses para realizar operacion
+        valorMedio(&generacionDatos, &datosCalculos);
+        break;
+    case 2:
+        // Valor mï¿½ximo y mï¿½nimo
+        valorMaximoMinimo(&generacionDatos, &datosCalculos);
+        break;
+    case 3:
+        // generacios Mas y Menos usada
+        generacionMasMenosUsada(generacionDatos, &datosCalculos);
+        break;
+    case 4:
+        porcentajeGeneracionTotal(generacionDatos, &datosCalculos);
+        break;
+    case 5:
+        sumaTotal(generacionDatos, &datosCalculos);
+        break;
+    default:
+        printf("El numero elegido no es una opcion valida, seleccione de nuevo.\n");
+        break;
+        return volver;
     }
 
-    printf("La generación más usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracion, mes1, anio1, mes2, anio2, generacionMasUsada);
-    printf("La generación menos usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracion, mes1, anio1, mes2, anio2, generacionMenosUsada);
-    break;
-    case 4:
-    	printf("Introduzca el tipo de generación: ");
-        scanf("%s", tipoGeneracion);
-        printf("\nHa seleccionado: %s\n", tipoGeneracion);
-		
-		 float generacionTotal = 0.0;
-         float generacionTipo = 0.0;
+    return volver;
+}
 
+void valorMedio(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+{
+    int i, j;
+    char tipoGeneracionNombre[Npequeno];
+    printf("Introduzca el tipo de generacion: ");
+    scanf("%s", tipoGeneracionNombre);
+    printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
     for (i = 0; i < numeroTiposDeGeneracion; i++)
     {
-        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
+        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
         {
             for (j = 0; j < numeroColumnas - 1; j++)
             {
                 int mes = generacionDatos->fechas[j].mes;
                 int anio = generacionDatos->fechas[j].ano;
 
-                if ((anio > anio1 || (anio == anio1 && mes >= mes1)) &&
-                    (anio < anio2 || (anio == anio2 && mes <= mes2)))
+                if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) && (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
+                // Para rango de fechas: fecha antes o despues del aï¿½o inical
+                // fecha en el mismo aï¿½o que el aï¿½o de inicio y final y  mes menor, igual o posterior al mes inicial.
+                {
+                    datosCalculos->media += generacionDatos->TiposGeneracion[i].valores[j];
+                    datosCalculos->total_Meses++;
+                }
+            }
+            break;
+        }
+    }
+    if (datosCalculos->media > 0)
+    {
+        datosCalculos->media /= (float)datosCalculos->total_Meses;
+    }
+
+    printf("La media de los datos de %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->media);
+}
+
+void valorMaximoMinimo(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+{
+    printf("Introduzca el tipo de generacion: ");
+    int i, j;
+    char tipoGeneracionNombre[Npequeno];
+
+    scanf("%s", tipoGeneracionNombre);
+    printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
+
+    for (i = 0; i < numeroTiposDeGeneracion; i++)
+    {
+        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
+        {
+            for (j = 0; j < numeroColumnas; j++)
+            {
+                int mes = generacionDatos->fechas[j].mes;
+                int anio = generacionDatos->fechas[j].ano;
+                if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) && (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
+                {
+                    float valor_generacion = generacionDatos->TiposGeneracion[i].valores[j];
+
+                    if (valor_generacion > datosCalculos->valor_maximo)
+                    {
+                        datosCalculos->valor_maximo = valor_generacion;
+                    }
+
+                    if (valor_generacion < datosCalculos->valor_minimo)
+                    {
+                        datosCalculos->valor_minimo = valor_generacion;
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    printf("Los valores maximos y minimos de %s entre las fechas %d/%d - %d/%d son:\nValor maximo: %f\nValor minimo: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->valor_maximo, datosCalculos->valor_minimo);
+}
+
+void generacionMasMenosUsada(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+{
+    char tipoGeneracionNombre[Npequeno];
+    int i, j;
+
+    printf("Introduzca el tipo de generacion: ");
+    scanf("%s", tipoGeneracionNombre);
+    printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
+
+    for (i = 0; i < numeroTiposDeGeneracion; i++)
+    {
+        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
+        {
+            datosCalculos->generacionMasUsada = generacionDatos->TiposGeneracion[i].valores[0];
+            datosCalculos->generacionMenosUsada = generacionDatos->TiposGeneracion[i].valores[0];
+
+            for (j = 1; j < numeroColumnas - 1; j++)
+            {
+                int mes = generacionDatos->fechas[j].mes;
+                int anio = generacionDatos->fechas[j].ano;
+
+                if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) && (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
+                {
+                    float valorGeneracion = generacionDatos->TiposGeneracion[i].valores[j];
+
+                    if (valorGeneracion > datosCalculos->generacionMasUsada)
+                        datosCalculos->generacionMasUsada = valorGeneracion;
+
+                    if (valorGeneracion < datosCalculos->generacionMenosUsada)
+                        datosCalculos->generacionMenosUsada = valorGeneracion;
+                }
+            }
+            break;
+        }
+    }
+
+    printf("La generacion mas usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->generacionMasUsada);
+    printf("La generacion menos usada de %s entre las fechas %d/%d - %d/%d es: %.2f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->generacionMenosUsada);
+}
+
+void sumaTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+{
+    char tipoGeneracionNombre[Npequeno];
+    int i, j;
+    printf("Introduzca el tipo de generacion:\n ");
+    scanf("%s", tipoGeneracionNombre);
+    printf("Ha seleccionado: %s\n", tipoGeneracionNombre);
+    for (i = 0; i < numeroTiposDeGeneracion; i++)
+    {
+        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
+        {
+            for (j = 0; j < numeroColumnas - 1; j++)
+            {
+                int mes = generacionDatos->fechas[j].mes;
+                int anio = generacionDatos->fechas[j].ano;
+
+                if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) && (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
+                // Para rango de fechas: fecha antes o despues del aï¿½o inical
+                // fecha en el mismo aï¿½o que el aï¿½o de inicio y final y  mes menor, igual o posterior al mes inicial.
+                {
+                    datosCalculos->suma_total += generacionDatos->TiposGeneracion[i].valores[j];
+                }
+            }
+            break;
+        }
+    }
+    printf("La suma total de la generacion %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracionNombre, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2, datosCalculos->suma_total);
+}
+
+void porcentajeGeneracionTotal(generacionElectrica *generacionDatos, datosParaCalculos *datosCalculos)
+{
+    char tipoGeneracionNombre[Npequeno];
+    int i, j;
+    printf("Introduzca el tipo de generacion: ");
+    scanf("%s", tipoGeneracionNombre);
+    printf("\nHa seleccionado: %s\n", tipoGeneracionNombre);
+
+    float generacionTotal = 0.0;
+    float generacionTipo = 0.0;
+
+    for (i = 0; i < numeroTiposDeGeneracion; i++)
+    {
+        if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracionNombre) == 0)
+        {
+            for (j = 0; j < numeroColumnas - 1; j++)
+            {
+                int mes = generacionDatos->fechas[j].mes;
+                int anio = generacionDatos->fechas[j].ano;
+
+                if ((anio > datosCalculos->anio1 || (anio == datosCalculos->anio1 && mes >= datosCalculos->mes1)) &&
+                    (anio < datosCalculos->anio2 || (anio == datosCalculos->anio2 && mes <= datosCalculos->mes2)))
                 {
                     generacionTipo += generacionDatos->TiposGeneracion[i].valores[j];
                 }
@@ -304,45 +374,10 @@ int calculoDatos(generacionElectrica *generacionDatos)
     if (generacionTotal > 0.0)
     {
         float porcentaje = (generacionTipo / generacionTotal) * 100;
-           printf("La generación de %s representa el %.2f%% de la generación total entre las fechas %d/%d - %d/%d\n", tipoGeneracion, porcentaje, mes1, anio1, mes2, anio2);
+        printf("La generacion de %s representa el %.2f%% de la generacion total entre las fechas %d/%d - %d/%d\n", tipoGeneracionNombre, porcentaje, datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2);
     }
     else
     {
-    printf("No se han encontrado datos de generación para el tipo seleccionado entre las fechas %d/%d - %d/%d\n", mes1, anio1, mes2, anio2);
+        printf("No se han encontrado datos de generacion para el tipo seleccionado entre las fechas %d/%d - %d/%d\n", datosCalculos->mes1, datosCalculos->anio1, datosCalculos->mes2, datosCalculos->anio2);
     }
-         break;
-        
-    case 5:
-    	printf("Introduzca el tipo de generacion:\n ");
-    	scanf("%s", tipoGeneracion);
-    	printf("Ha seleccionado: %s\n", tipoGeneracion);
-		for (i = 0; i < numeroTiposDeGeneracion; i++)
-            {
-                if (strcmp(generacionDatos->TiposGeneracion[i].nombre, tipoGeneracion) == 0)
-                {
-                    for (j = 0; j < numeroColumnas - 1; j++)
-                    {
-                        int mes = generacionDatos->fechas[j].mes;
-                        int anio = generacionDatos->fechas[j].ano;
-						
-                        if ((anio > anio1 || (anio == anio1 && mes >= mes1)) && (anio < anio2 || (anio == anio2 && mes <= mes2)))
-                        //Para rango de fechas: fecha antes o despues del año inical
-						//fecha en el mismo año que el año de inicio y final y  mes menor, igual o posterior al mes inicial.
-                        {
-                            suma_total += generacionDatos->TiposGeneracion[i].valores[j];
-                        }
-                    }
-                    break;
-                }
-            }
-            printf("La suma total de la generación %s entre las fechas %d/%d - %d/%d es: %f\n", tipoGeneracion, mes1, anio1, mes2, anio2, suma_total);
-            break;
-    default:
-            printf("El número elegido no es una opción válida, seleccione de nuevo.\n");
-            break;
-    
-    return volver;
 }
-}
-
-
