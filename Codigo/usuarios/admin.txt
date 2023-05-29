@@ -5,3 +5,4 @@ respuestaSeguridad:admin
 -----DATOS-----
 datoUno,123.123123
 datoTres,333.333
+La media de los datos de Eolica entre las fechas 1/2021 - 3/2021,6334.350098

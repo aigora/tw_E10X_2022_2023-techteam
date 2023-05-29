@@ -26,7 +26,7 @@ int menuUsuario(usuario *usuarioActual)
         switch (eleccion)
         {
         case '1':
-            if (sesionIncognito(sesionAbierta) == salir)
+            if (sesionIncognito(usuarioActual) == salir)
             {
                 return salir;
             }

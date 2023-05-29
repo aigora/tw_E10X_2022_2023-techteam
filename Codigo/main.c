@@ -15,6 +15,7 @@ int main()
 
 void buclePrincipal()
 {
+    usuario usuarioVacio;
     int modo = volver;
     while (modo == volver)
     {
@@ -24,7 +25,8 @@ void buclePrincipal()
             modo = sesionUsuario();
             break;
         case modoIncognito:
-            modo = sesionIncognito(sesionCerrada);
+            usuarioVacio.sesionEstado = sesionCerrada;
+            modo = sesionIncognito(&usuarioVacio);
             break;
         case salir:
             // salir del programa
