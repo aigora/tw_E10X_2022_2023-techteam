@@ -1,4 +1,4 @@
-/*#include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -6,7 +6,7 @@
 #define MESES 24
 #define MAX_GENERACION 100
 
-// Función de comparación para qsort
+// Funcion de comparacion para qsort
 int comparar(const void *a, const void *b) {
     float numero1 = *(const float *)a;
     float numero2 = *(const float *)b;
@@ -19,7 +19,7 @@ int comparar(const void *a, const void *b) {
         return 0;
 }
 
-// Función para calcular el cuartil habiendo ordenado los datos.
+// Funcion para calcular el cuartil habiendo ordenado los datos.
 float calcularCuartil(float datos[], int n, int cuartil) {
     int posicion = (cuartil * n) / 100;
     return datos[posicion - 1];
@@ -40,7 +40,7 @@ int main() {
         return 1;
     }
 
-    // Saltar las primeras 5 líneas ya que la información importante comienza en la línea 6.
+    // Saltar las primeras 5 lineas ya que la informacion importante comienza en la linea 6.
     for (int i = 0; i < 5; i++) {
         fgets(linea, sizeof(linea), file);
     }
@@ -78,7 +78,7 @@ int main() {
     }
 
     return 0;
-}*/
+}
 
 
 
