@@ -73,7 +73,7 @@ int sesionIncognito(int sesionUsuario)
 int lecturaGeneracion(generacionElectrica *generacionDatos)
 {
     FILE *file;
-    file = fopen("Codigo/generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
+    file = fopen("generacion_por_tecnologias_21_22_puntos_simplificado.csv", "r");
     if (file == NULL)
     {
         printf("ERROR AL ABRIR EL FICHERO\n");
