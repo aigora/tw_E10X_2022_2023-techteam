@@ -26,20 +26,6 @@ void mostrarMenu()
     printf("Opcion: ");
 }
 
-void mostrarDatos(GeneracionElectrica *generacionDatos)
-{
-    printf("\nDatos actuales:\n");
-
-    for (int i = 0; i < generacionDatos->numGeneraciones; i++) {
-        printf("Generacion: %s\n", generacionDatos->generaciones[i].nombre);
-        printf("Datos: ");
-        for (int j = 0; j < MAX_MESES; j++) {
-            printf("%.2f ", generacionDatos->generaciones[i].valores[j]);
-        }
-        printf("\n");
-    }
-}
-
 void agregarDatos(GeneracionElectrica *generacionDatos)
 {
     if (generacionDatos->numGeneraciones >= MAX_GENERACIONES) {
