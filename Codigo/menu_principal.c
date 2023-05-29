@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #include "estructuras_de_datos.h"
+#include "menu_principal.h"
 
 int menuPrincipal()
 {

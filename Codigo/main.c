@@ -6,7 +6,6 @@
 #include "sesion_incognito.h"
 
 void buclePrincipal();
-int menuPrincipal();
 
 int main()
 {
